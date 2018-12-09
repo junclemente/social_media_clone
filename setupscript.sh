@@ -6,4 +6,5 @@ apt-get install -y libffi-dev
 pip3 install django==1.11
 pip3 install django-bootstrap3
 pip3 install misaka
+pip3 install django-braces
 
