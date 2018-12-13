@@ -9,6 +9,7 @@ from django.views import generic
 from django.shortcuts import get_object_or_404
 
 from groups.models import Group, GroupMembers
+from . import models
 
 
 class CreateGroup(LoginRequiredMixin, generic.CreateView):
@@ -34,7 +35,7 @@ class JoinGroup(LoginRequiredMixin, generic.RedirectView):
         group = get_object_or_404(Group, slug=self.kwargs.get('slug'))
 
         try:
-            GroupMember.objects.create(user=self.request.user, group=group)
+            GroupMembers.objects.create(user=self.request.user, group=group)
 
         except IntegrityError:
             messages.warning(self.request, ('Warning already a member!'))
@@ -52,11 +53,11 @@ class LeaveGroup(LoginRequiredMixin, generic.RedirectView):
     def get(self, request, *args, **kwargs):
 
         try:
-            membership = models.GroupMember.objects.filter(
-                            user=self.request.user,
-                            group__slug = self.kwargs.get(slug)
-                            ).get()
-        except models.GroupMember.DoesNotExist:
+            membership = models.GroupMembers.objects.filter(
+                user=self.request.user,
+                group__slug=self.kwargs.get('slug')
+                ).get()
+        except models.GroupMembers.DoesNotExist:
             messages.warning(self.request, 'Sorry you are not in this group!')
             user = self.request.user
         else:

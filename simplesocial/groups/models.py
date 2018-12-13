@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django.core.urlresolvers import reverse
+from django import template
 
 # Create your models here.
 import misaka
@@ -8,7 +9,6 @@ import misaka
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from django import template
 register = template.Library()
 
 
@@ -41,7 +41,5 @@ class GroupMembers(models.Model):
     def __str__(self):
         return self.user.username
 
-
     class Meta:
         unique_together = ('group', 'user')
-
