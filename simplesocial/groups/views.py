@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import (LoginRequiredMixin,
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 
 from groups.models import Group, GroupMembers
 from . import models
@@ -56,10 +57,10 @@ class LeaveGroup(LoginRequiredMixin, generic.RedirectView):
             membership = models.GroupMembers.objects.filter(
                 user=self.request.user,
                 group__slug=self.kwargs.get('slug')
-                ).get()
+            ).get()
         except models.GroupMembers.DoesNotExist:
             messages.warning(self.request, 'Sorry you are not in this group!')
-            user = self.request.user
+            # user = self.request.user
         else:
             membership.delete()
             messages.success(self.request, 'You have left the group!')
